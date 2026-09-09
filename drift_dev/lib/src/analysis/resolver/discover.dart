@@ -28,10 +28,25 @@ class DiscoverStep {
 
   List<DiscoveredElement> _checkForDuplicates(List<DiscoveredElement> source) {
     final ids = <DriftElementId>{};
+    final sourceElementNames = <String>{};
     final result = <DiscoveredElement>[];
 
     for (final found in source) {
       if (ids.add(found.ownId)) {
+        if (found case DiscoveredDartElement(:final dartElementName?)) {
+          if (!sourceElementNames.add(dartElementName)) {
+            _file.errorsDuringDiscovery.add(
+              .forDartElement(
+                found.dartElement,
+                'This defines multiple elements considered by drift, which is '
+                'ambiguous. ',
+              ),
+            );
+
+            continue;
+          }
+        }
+
         result.add(found);
       } else {
         final DriftAnalysisError error;
@@ -48,6 +63,7 @@ class DiscoverStep {
         }
 
         _file.errorsDuringDiscovery.add(error);
+        continue;
       }
     }
 
@@ -259,6 +275,17 @@ class _FindDartElements extends RecursiveElementVisitor2<void> {
 
   @override
   void visitClassElement(ClassElement element) {
+    // Check if this class declares a database or a database accessor.
+    final firstDb = _isDatabase.firstAnnotationOf(element);
+    final firstDao = _isDao.firstAnnotationOf(element);
+    final id = _discoverStep._id(element.name!);
+
+    if (firstDb != null) {
+      found.add(DiscoveredBaseAccessor(id, element, firstDb, true));
+    } else if (firstDao != null) {
+      found.add(DiscoveredBaseAccessor(id, element, firstDao, false));
+    }
+
     if (_isDslTable(element)) {
       // Ignore "abstract tables" (i.e. table classes with abstract methods)
       final declaresAbstractMethod = element.methods
@@ -291,18 +318,6 @@ class _FindDartElements extends RecursiveElementVisitor2<void> {
       final id = _discoverStep._id(name);
 
       found.add(DiscoveredDartView(id, element, annotation));
-    } else {
-      // Check if this class declares a database or a database accessor.
-
-      final firstDb = _isDatabase.firstAnnotationOf(element);
-      final firstDao = _isDao.firstAnnotationOf(element);
-      final id = _discoverStep._id(element.name!);
-
-      if (firstDb != null) {
-        found.add(DiscoveredBaseAccessor(id, element, firstDb, true));
-      } else if (firstDao != null) {
-        found.add(DiscoveredBaseAccessor(id, element, firstDao, false));
-      }
     }
 
     super.visitClassElement(element);

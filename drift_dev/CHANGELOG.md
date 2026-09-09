@@ -1,3 +1,8 @@
+## 2.35.0-wip
+
+- Warn when a table class is annotated with `@DriftDatabase` instead of silently
+  generating nothing ([#3854](https://github.com/simolus3/drift/issues/3854)).
+
 ## 2.34.6
 
 - Remove legacy command used to migrate from `moor` from `drift`.

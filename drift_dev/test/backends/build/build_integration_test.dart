@@ -1360,6 +1360,34 @@ class TestAccessor extends DatabaseAccessor<AppDatabase> {
     );
   });
 
+  test('warns when a class declares two elements', () async {
+    // Regression test for https://github.com/simolus3/drift/issues/3854: Adding
+    // a @DriftDatabase annotation to a table silently does nothing.
+    await emulateDriftBuild(
+      inputs: {
+        'a|lib/database.dart': '''
+import 'package:drift/drift.dart';
+
+@DriftDatabase(tables: [Users])
+class Users extends Table {
+  IntColumn get id => integer().autoIncrement()();
+}
+
+class AppDatabase {}
+''',
+      },
+      logger: loggerThat(
+        emits(
+          isA<LogRecord>().having(
+            (e) => e.message,
+            'message',
+            contains('This defines multiple elements considered by drift'),
+          ),
+        ),
+      ),
+    );
+  });
+
   test('not added false positive', () async {
     // Regression test for https://github.com/simolus3/drift/issues/3656
     await emulateDriftBuild(

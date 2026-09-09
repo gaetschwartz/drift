@@ -443,17 +443,17 @@ sealed class BaseElementResolver<T extends DiscoveredElement> {
     DriftAnalysisError Function(String msg) createError, {
     DriftElementKind? enforceKind,
   }) {
-    if (result is ResolvedReferenceFound) {
-      if (enforceKind != null && result.token.kind != enforceKind) {
+    if (result case ResolvedReferenceFound(:final token)) {
+      if (enforceKind != null && token.kind != enforceKind) {
         reportError(
           createError(
-            'Expected a ${enforceKind.name}, but ${result.token.id.name} is a ${enforceKind.name}',
+            'Expected a ${enforceKind.name}, but ${token.id.name} is a ${token.kind.name}',
           ),
         );
         return null;
       }
 
-      return result.token;
+      return token;
     } else {
       reportErrorForUnresolvedReference(result, createError);
       return null;
