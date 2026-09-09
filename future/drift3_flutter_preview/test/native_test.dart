@@ -178,7 +178,7 @@ final class SimpleDatabase extends GeneratedDatabase {
     isStrict: true,
     withoutRowId: false,
     columns: [
-      (name) => TableColumn(
+      () => TableColumn(
         name: 'id',
         sqlType: .int,
         requiredDuringInsert: false,

@@ -57,18 +57,18 @@ extension type Shape0(i0.VersionedTable _) implements i0.VersionedTable {
   i1.TableColumn<int> get color =>
       columnsByName['color']! as i1.TableColumn<int>;
 }
-i1.TableColumn<int> _column_0(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_0() => i1.TableColumn<int>(
     name: 'id',
     sqlType: i1.SqlType.int,
     constraints: () => [
           const i1.ColumnPrimaryKeyConstraint(isAutoIncrementing: true),
           const i1.ColumnNotNullConstraint()
         ]);
-i1.TableColumn<String> _column_1(String aliasedName) => i1.TableColumn<String>(
+i1.TableColumn<String> _column_1() => i1.TableColumn<String>(
     name: 'name',
     sqlType: i1.SqlType.text,
     constraints: () => [const i1.ColumnNotNullConstraint()]);
-i1.TableColumn<int> _column_2(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_2() => i1.TableColumn<int>(
     name: 'color',
     sqlType: i1.SqlType.int,
     constraints: () => [const i1.ColumnNotNullConstraint()]);
@@ -81,20 +81,20 @@ extension type Shape1(i0.VersionedTable _) implements i0.VersionedTable {
   i1.TableColumn<DateTime> get dueDate =>
       columnsByName['due_date']! as i1.TableColumn<DateTime>;
 }
-i1.TableColumn<String> _column_3(String aliasedName) => i1.TableColumn<String>(
+i1.TableColumn<String> _column_3() => i1.TableColumn<String>(
     name: 'description',
     sqlType: i1.SqlType.text,
     constraints: () => [const i1.ColumnNotNullConstraint()]);
-i1.TableColumn<int> _column_4(String aliasedName) =>
+i1.TableColumn<int> _column_4() =>
     i1.TableColumn<int>(name: 'category', sqlType: i1.SqlType.int);
-i1.TableColumn<DateTime> _column_5(String aliasedName) =>
+i1.TableColumn<DateTime> _column_5() =>
     i1.TableColumn<DateTime>(name: 'due_date', sqlType: i1.SqlType.dateTime);
 extension type Shape2(i0.VersionedVirtualTable _)
     implements i0.VersionedVirtualTable {
   i1.SchemaColumn<String> get description =>
       columnsByName['description']! as i1.SchemaColumn<String>;
 }
-i1.TableColumn<String> _column_6(String aliasedName) => i1.TableColumn<String>(
+i1.TableColumn<String> _column_6() => i1.TableColumn<String>(
     name: 'description',
     sqlType: i1.SqlType.text,
     constraints: () => [i1.ColumnConstraint.customSql('')]);
@@ -154,7 +154,7 @@ final class Schema3 extends i0.VersionedSchema {
           'CREATE TRIGGER todos_update AFTER UPDATE ON todo_entries BEGIN INSERT INTO text_entries (text_entries, "rowid", description) VALUES (\'delete\', new.id, new.description);INSERT INTO text_entries ("rowid", description) VALUES (new.id, new.description);END'));
 }
 
-i1.TableColumn<int> _column_7(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_7() => i1.TableColumn<int>(
     name: 'id',
     sqlType: i1.SqlType.int,
     constraints: () => [
@@ -163,7 +163,7 @@ i1.TableColumn<int> _column_7(String aliasedName) => i1.TableColumn<int>(
               dialectSpecificSql: {})),
           const i1.ColumnNotNullConstraint()
         ]);
-i1.TableColumn<int> _column_8(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_8() => i1.TableColumn<int>(
     name: 'category',
     sqlType: i1.SqlType.int,
     constraints: () => [
@@ -227,16 +227,16 @@ final class Schema4 extends i0.VersionedSchema {
           'CREATE TRIGGER todos_update AFTER UPDATE ON todo_entries BEGIN INSERT INTO text_entries (text_entries, "rowid", description) VALUES (\'delete\', new.id, new.description);INSERT INTO text_entries ("rowid", description) VALUES (new.id, new.description);END'));
 }
 
-i1.TableColumn<int> _column_9(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_9() => i1.TableColumn<int>(
     name: 'id',
     sqlType: i1.SqlType.int,
     constraints: () =>
         [i1.ColumnConstraint.customSql('PRIMARY KEY AUTOINCREMENT NOT NULL')]);
-i1.TableColumn<String> _column_10(String aliasedName) => i1.TableColumn<String>(
+i1.TableColumn<String> _column_10() => i1.TableColumn<String>(
     name: 'name',
     sqlType: i1.SqlType.text,
     constraints: () => [i1.ColumnConstraint.customSql('NOT NULL')]);
-i1.TableColumn<int> _column_11(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_11() => i1.TableColumn<int>(
     name: 'color',
     sqlType: i1.SqlType.int,
     constraints: () => [i1.ColumnConstraint.customSql('NOT NULL')]);
@@ -249,16 +249,16 @@ extension type Shape3(i0.VersionedTable _) implements i0.VersionedTable {
   i1.TableColumn<int> get dueDate =>
       columnsByName['due_date']! as i1.TableColumn<int>;
 }
-i1.TableColumn<String> _column_12(String aliasedName) => i1.TableColumn<String>(
+i1.TableColumn<String> _column_12() => i1.TableColumn<String>(
     name: 'description',
     sqlType: i1.SqlType.text,
     constraints: () => [i1.ColumnConstraint.customSql('NOT NULL')]);
-i1.TableColumn<int> _column_13(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_13() => i1.TableColumn<int>(
     name: 'category',
     sqlType: i1.SqlType.int,
     constraints: () =>
         [i1.ColumnConstraint.customSql('REFERENCES categories(id)')]);
-i1.TableColumn<int> _column_14(String aliasedName) => i1.TableColumn<int>(
+i1.TableColumn<int> _column_14() => i1.TableColumn<int>(
     name: 'due_date',
     sqlType: i1.SqlType.int,
     constraints: () => [i1.ColumnConstraint.customSql('')]);

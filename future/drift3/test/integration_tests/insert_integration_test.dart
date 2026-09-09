@@ -258,14 +258,14 @@ void main() {
       table = VersionedTable(
         entityName: 'tbl',
         columns: [
-          (_) => TableColumn(
+          () => TableColumn(
             name: 'id',
             sqlType: .int,
             constraints: () => [
               ColumnPrimaryKeyConstraint(isAutoIncrementing: false),
             ],
           ),
-          (_) => TableColumn(
+          () => TableColumn(
             name: 'parent',
             sqlType: .int,
             constraints: () => [

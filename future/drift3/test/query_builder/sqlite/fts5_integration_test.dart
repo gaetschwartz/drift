@@ -252,7 +252,7 @@ void main() {
     final docs = VersionedVirtualTable(
       entityName: 'docs',
       moduleAndArgs: 'fts5(content)',
-      columns: [(name) => TableColumn(name: name, sqlType: .text)],
+      columns: [() => TableColumn(name: 'content', sqlType: .text)],
     );
 
     final query = db

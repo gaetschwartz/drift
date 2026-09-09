@@ -127,7 +127,13 @@ class SchemaVersionWriter {
 
     return _columnCodeToFactory.putIfAbsent(code, () {
       final methodName = '_column_${_columnCodeToFactory.length}';
-      text.writeln('$type $methodName(String aliasedName) => $code;');
+
+      if (_drift3) {
+        text.writeln('$type $methodName() => $code;');
+      } else {
+        text.writeln('$type $methodName(String aliasedName) => $code;');
+      }
+
       return methodName;
     });
   }

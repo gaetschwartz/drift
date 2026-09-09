@@ -310,7 +310,7 @@ void main() {
       entityName: 'foo',
       isStrict: false,
       withoutRowId: false,
-      columns: [(_) => column],
+      columns: [() => column],
       tableConstraints: [],
     );
 
@@ -405,7 +405,7 @@ final class _FakeSchemaVersion extends VersionedSchema {
     VersionedTable(
       entityName: 'my_table',
       columns: [
-        (name) => TableColumn<int>(
+        () => TableColumn<int>(
           name: 'foo',
           sqlType: .int,
           constraints: () => [ColumnNotNullConstraint()],

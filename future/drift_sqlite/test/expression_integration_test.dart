@@ -215,7 +215,7 @@ final class _TestDatabase extends GeneratedDatabase {
     isStrict: false,
     withoutRowId: false,
     columns: [
-      (name) => TableColumn(
+      () => TableColumn(
         name: 'id',
         sqlType: .int,
         constraints: () => [
@@ -231,16 +231,16 @@ final class _TestDatabase extends GeneratedDatabase {
     isStrict: false,
     withoutRowId: false,
     columns: [
-      (name) => TableColumn(
+      () => TableColumn(
         name: 'id',
         sqlType: .int,
         constraints: () => [
           ColumnPrimaryKeyConstraint(isAutoIncrementing: true),
         ],
       ),
-      (name) => TableColumn(name: 'category', sqlType: .int),
-      (name) => TableColumn(name: 'title', sqlType: .int),
-      (name) => TableColumn(name: 'content', sqlType: .int),
+      () => TableColumn(name: 'category', sqlType: .int),
+      () => TableColumn(name: 'title', sqlType: .int),
+      () => TableColumn(name: 'content', sqlType: .int),
     ],
     tableConstraints: [],
   );
@@ -249,13 +249,13 @@ final class _TestDatabase extends GeneratedDatabase {
     entityName: 'noRowId',
     isStrict: false,
     withoutRowId: true,
-    columns: [(name) => TableColumn(name: 'a', sqlType: .int)],
+    columns: [() => TableColumn(name: 'a', sqlType: .int)],
     tableConstraints: [],
   );
 
   late final fts5 = VersionedVirtualTable(
     entityName: 'fts',
-    columns: [(name) => TableColumn(name: 'a', sqlType: .text)],
+    columns: [() => TableColumn(name: 'a', sqlType: .text)],
     moduleAndArgs: 'fts5 (a)',
   );
 }

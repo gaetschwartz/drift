@@ -147,7 +147,7 @@ final class VersionedTable extends Table
 
   /// List of columns, represented as a function that returns the generated
   /// column when given the resolved table name.
-  final List<TableColumn Function(String)> _columnFactories;
+  final List<TableColumn Function()> _columnFactories;
 
   @override
   final List<String> customConstraints;
@@ -160,12 +160,12 @@ final class VersionedTable extends Table
     required this.entityName,
     required this.isStrict,
     required this.withoutRowId,
-    required List<TableColumn Function(String)> columns,
+    required List<TableColumn Function()> columns,
     required List<String> tableConstraints,
     this.alias,
   }) : _columnFactories = columns,
        customConstraints = tableConstraints,
-       columns = [for (final column in columns) column(alias ?? entityName)] {
+       columns = [for (final column in columns) column()] {
     for (final column in this.columns) {
       column.owningResultSet = this;
     }
@@ -180,7 +180,11 @@ final class VersionedTable extends Table
        withoutRowId = source.withoutRowId,
        customConstraints = source.customConstraints,
        _columnFactories = source._columnFactories,
-       columns = [for (final column in source._columnFactories) column(alias)];
+       columns = [for (final column in source._columnFactories) column()] {
+    for (final column in columns) {
+      column.owningResultSet = this;
+    }
+  }
 
   @override
   bool get dontWriteConstraints => true;

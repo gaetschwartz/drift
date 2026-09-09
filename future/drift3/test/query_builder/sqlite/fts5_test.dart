@@ -11,9 +11,9 @@ void main() {
   final email = VersionedVirtualTable(
     entityName: 'email',
     columns: [
-      (_) => TableColumn<String>(name: 'sender', sqlType: .text),
-      (_) => TableColumn<String>(name: 'title', sqlType: .text),
-      (_) => TableColumn<String>(name: 'body', sqlType: .text),
+      () => TableColumn<String>(name: 'sender', sqlType: .text),
+      () => TableColumn<String>(name: 'title', sqlType: .text),
+      () => TableColumn<String>(name: 'body', sqlType: .text),
     ],
     moduleAndArgs: 'fts5(sender, title, body)',
   );
