@@ -1,4 +1,4 @@
-## 2.35.0-wip
+## 2.35.0
 
 - Warn when a table class is annotated with `@DriftDatabase` instead of silently
   generating nothing ([#3854](https://github.com/simolus3/drift/issues/3854)).
