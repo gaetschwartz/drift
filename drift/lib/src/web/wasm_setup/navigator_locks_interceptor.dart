@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:js_interop';
 
 import 'package:drift/drift.dart';
-import 'package:web/web.dart'
-    show AbortController, DOMException, LockManager, LockOptions;
+import 'package:web/web.dart' show LockManager, AbortController;
 
 import '../../runtime/cancellation_zone.dart';
 import 'shared.dart';
@@ -80,8 +78,12 @@ final class NavigatorLocksExecutor implements QueryExecutor {
     return _inner.close();
   }
 
-  Future<void> _acquireLock(Completer<void> returnLock) {
-    return _locks.acquire(_name, returnLock);
+  Future<void> _acquireLock(Completer<void> returnLock) async {
+    checkIfCancelled();
+    final abort = AbortController();
+    doOnCancellation(() => abort.abort());
+
+    return await _locks.acquire(_name, returnLock);
   }
 
   Future<T> _withLock<T>(Future<T> Function() block) async {
@@ -133,38 +135,5 @@ final class _AcquireNavigatorLockInterceptor extends QueryInterceptor {
     return inner.rollback().whenComplete(
       () => _returnNavigatorLocks.complete(),
     );
-  }
-}
-
-extension on LockManager {
-  Future<void> acquire(String lockName, Completer<void> returnLock) {
-    checkIfCancelled();
-    final abort = AbortController();
-    doOnCancellation(() => abort.abort());
-
-    final hasLock = Completer<void>.sync();
-
-    JSPromise callback() {
-      hasLock.complete();
-      return returnLock.future.toJS;
-    }
-
-    request(
-      lockName,
-      LockOptions(signal: abort.signal),
-      Zone.current.bindCallback(callback).toJS,
-    ).toDart.onError((e, s) {
-      final domError = e as DOMException;
-
-      if (domError.name == 'AbortError') {
-        hasLock.completeError(const CancellationException());
-      } else {
-        hasLock.completeError(e);
-      }
-
-      return null;
-    });
-
-    return hasLock.future;
   }
 }

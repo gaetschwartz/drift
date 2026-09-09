@@ -1,6 +1,7 @@
 ## 3.35.0-wip
 
-- Breaking change (web): Remove `PortToChannel` extension on `dart:html` type. Use `WebPortToChannel` extension on `MessagePort` from `package:web` instead.
+- Breaking change (web): Remove `PortToChannel` extension on `dart:html` types. Use `WebPortToChannel` extension on `MessagePort` from `package:web` instead.
+- Web: Fix race to OPFS file handle in compatiblity check.
 
 ## 2.34.4
 

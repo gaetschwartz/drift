@@ -293,7 +293,11 @@ class $$TestTableTableTableManager extends RootTableManager<
             content: content,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable<$TestTableTable, TestTableData>(table),
+                    BaseReferences<_$TestDatabase, $TestTableTable,
+                        TestTableData>(db, table, e)
+                  ))
               .toList(),
           prefetchHooksCallback: null,
         ));

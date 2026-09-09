@@ -5,6 +5,7 @@ import 'dart:js_interop_unsafe';
 import 'package:drift/drift.dart';
 import 'package:drift/remote.dart';
 import 'package:drift/wasm.dart';
+import 'package:meta/meta.dart';
 import 'package:web/web.dart'
     show
         Worker,
@@ -23,7 +24,10 @@ import 'package:web/web.dart'
         FileSystemSyncAccessHandle,
         FileSystemGetFileOptions,
         FileSystemRemoveOptions,
-        FileSystemGetDirectoryOptions;
+        FileSystemGetDirectoryOptions,
+        LockOptions,
+        DOMException,
+        AbortController;
 // ignore: implementation_imports
 import 'package:sqlite3/src/wasm/js_interop/core.dart';
 import 'package:sqlite3/wasm.dart';
@@ -63,8 +67,13 @@ Future<bool> checkOpfsSupport() async {
   FileSystemDirectoryHandle? opfsRoot;
   FileSystemFileHandle? fileHandle;
   FileSystemSyncAccessHandle? openedFile;
+  final releaseLock = Completer<void>();
 
   try {
+    // We can't use OPFS concurrently, this avoids races when multiple tabs try
+    // to open a database at the same time.
+    await locks?.acquire(testFileName, releaseLock);
+
     opfsRoot = await storage.getDirectory().toDart;
 
     fileHandle = await opfsRoot
@@ -91,8 +100,13 @@ Future<bool> checkOpfsSupport() async {
     }
 
     if (opfsRoot != null && fileHandle != null) {
-      await opfsRoot.removeEntry(testFileName).toDart;
+      await opfsRoot.removeEntry(testFileName).toDart.onError((_, _) {
+        // ignore
+        return null;
+      });
     }
+
+    releaseLock.complete();
   }
 }
 
@@ -494,5 +508,39 @@ extension CompleteIdbRequest on IDBRequest {
     });
 
     return completer.future;
+  }
+}
+
+@internal
+extension AcquireLock on LockManager {
+  Future<void> acquire(
+    String lockName,
+    Completer<void> returnLock, [
+    AbortController? abort,
+  ]) {
+    final hasLock = Completer<void>.sync();
+
+    JSPromise callback() {
+      hasLock.complete();
+      return returnLock.future.toJS;
+    }
+
+    request(
+      lockName,
+      abort == null ? LockOptions() : LockOptions(signal: abort.signal),
+      Zone.current.bindCallback(callback).toJS,
+    ).toDart.onError((e, s) {
+      final domError = e as DOMException;
+
+      if (domError.name == 'AbortError') {
+        hasLock.completeError(const CancellationException());
+      } else {
+        hasLock.completeError(e);
+      }
+
+      return null;
+    });
+
+    return hasLock.future;
   }
 }
