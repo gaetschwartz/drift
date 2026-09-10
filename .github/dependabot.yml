@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    ignore:
+      # Only create updates for actions/ references when it's actually required.
+      # We use @v$major tags, which already resolve to the latest version within
+      # that major revision.
+      - dependency-name: "actions/*"
+        update-types:
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
