@@ -364,7 +364,7 @@ jobs:
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
-      - uses: nanasess/setup-chromedriver@v2
+      - uses: nanasess/setup-chromedriver@v3
       - name: Download WebAssembly assets
         run: dart tool/download_sqlite_wasm.dart
       - name: Test
