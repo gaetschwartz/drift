@@ -23,7 +23,7 @@ jobs:
       packages: write # Needed to upload release assets
       contents: write # Needed to upload release assets
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Install dart because the action installs a pub token.
       - uses: dart-lang/setup-dart@v1
 
@@ -31,7 +31,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v6
         with:
           path: "${{ env.PUB_CACHE }}"
           key: dart-dependencies-${{ needs.setup.outputs.dart_version }}-${{ hashFiles('**/pubspec.yaml') }}
@@ -83,7 +83,7 @@ jobs:
       run:
         working-directory: drift_dev
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Install dart because the action installs a pub token.
       - uses: dart-lang/setup-dart@v1
       - uses: ./.github/actions/prepare
@@ -105,7 +105,7 @@ jobs:
       run:
         working-directory: sqlparser
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Install dart because the action installs a pub token.
       - uses: dart-lang/setup-dart@v1
       - uses: ./.github/actions/prepare
@@ -126,7 +126,7 @@ jobs:
       run:
         working-directory: extras/drift_postgres
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Install dart because the action installs a pub token.
       - uses: dart-lang/setup-dart@v1
       - uses: ./.github/actions/prepare
@@ -147,7 +147,7 @@ jobs:
       run:
         working-directory: drift_flutter
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Install dart because the action installs a pub token.
       - uses: dart-lang/setup-dart@v1
       - uses: ./.github/actions/prepare

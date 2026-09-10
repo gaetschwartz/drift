@@ -22,7 +22,7 @@ jobs:
         working-directory: docs
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -44,7 +44,7 @@ jobs:
         run: dart test
       - name: Deploy to netlify (Branch)
         if: ${{ github.event_name == 'push' }}
-        uses: nwtgck/actions-netlify@v3
+        uses: nwtgck/actions-netlify@v4
         with:
           production-branch: latest-release
           publish-dir: docs/build/jaspr
@@ -57,7 +57,7 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
       - name: Deploy to netlify (Pull Request)
         if: ${{ github.event_name == 'pull_request' }}
-        uses: nwtgck/actions-netlify@v3
+        uses: nwtgck/actions-netlify@v4
         with:
           production-branch: latest-release
           publish-dir: docs/build/jaspr
@@ -79,7 +79,7 @@ jobs:
         working-directory: drift
     steps:
       # setup
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -110,7 +110,7 @@ jobs:
         working-directory: drift
     steps:
       # setup
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -135,7 +135,7 @@ jobs:
   #   name: "Drift web unit tests, dart2js, ${{ matrix.browser }}, shard ${{ matrix.shard }}"
   #   steps:
   #     # setup
-  #     - uses: actions/checkout@v4
+  #     - uses: actions/checkout@v7
   #     - uses: ./.github/actions/prepare
   #       with:
   #         flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -153,7 +153,7 @@ jobs:
     name: "Drift web unit tests, dart2wasm, ${{ matrix.browser }}"
     steps:
       # setup
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -173,7 +173,7 @@ jobs:
         working-directory: drift_dev
     steps:
       # setup
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -194,7 +194,7 @@ jobs:
         working-directory: sqlparser
     steps:
       # setup
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -238,7 +238,7 @@ jobs:
         ports:
           - 3306:3306
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -295,7 +295,7 @@ jobs:
         flutter: ["3.44.9", "3.47.0"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -332,7 +332,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
@@ -360,11 +360,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/prepare
         with:
           flutter_version: ${{ needs.setup.outputs.flutter_version }}
-      - uses: nanasess/setup-chromedriver@v2
+      - uses: nanasess/setup-chromedriver@v3
       - name: Download WebAssembly assets
         run: dart tool/download_sqlite_wasm.dart
       - name: Test
