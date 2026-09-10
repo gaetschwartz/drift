@@ -12,7 +12,7 @@ jobs:
     outputs:
       flutter_version: ${{ steps.setup_flutter.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Flutter
         id: setup_flutter
         uses: subosito/flutter-action@v2
